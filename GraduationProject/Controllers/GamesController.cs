@@ -1,9 +1,11 @@
 using System.Security.Claims;
+using GraduationProject.Bases;
 using GraduationProject.Data;
 using GraduationProject.DTOs;
 using GraduationProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,7 +46,7 @@ public class GamesController(
         context.GameScores.Add(score);
         await context.SaveChangesAsync();
 
-        return Ok(new { message = "Score submitted successfully" });
+        return Ok(new BaseResponse<string>() { Succeeded = true ,Message = "Score submitted successfully" });
     }
     
     [Authorize]
@@ -60,6 +62,7 @@ public class GamesController(
         var userScores = await context.GameScores
             .Include(s => s.Game)
             .Where(s => s.UserId == user.Id)
+            .OrderByDescending(s => s.DateAchieved)
             .Select(s => new UserGameScoreDto
             {
                 GameName = s.Game.Name,
@@ -68,7 +71,8 @@ public class GamesController(
             })
             .ToListAsync();
 
-        return Ok(userScores);
+
+        return Ok(new BaseResponse<IEnumerable<UserGameScoreDto>>(userScores));
     }
 
     

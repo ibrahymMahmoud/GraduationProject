@@ -199,7 +199,7 @@ public class AuthController(
             await mailService.SendEmailAsync(emailMessage);
             
             await transaction.CommitAsync();
-            return Ok(new BaseResponse<string>("Email has been confirmed."));
+            return Ok(new BaseResponse<string>() { Message = "Email has been Confirmed",Succeeded = true });
 
         }
         catch (Exception e)
@@ -249,7 +249,7 @@ public class AuthController(
         
         await mailService.SendEmailAsync(emailMessage);
         
-        return Ok(new BaseResponse<string>("Password reset code has been sent to your email."));
+        return Ok(new BaseResponse<string>() { Message = "Password reset code has been sent to your email." ,Succeeded = true});
     }
 
     [HttpPost("ResetPassword")]
@@ -278,7 +278,7 @@ public class AuthController(
         var result = await userManager.AddPasswordAsync(user, request.NewPassword);
 
         return result.Succeeded ? 
-            Ok(new BaseResponse<string>("Password has been reset.")) :
+            Ok(new BaseResponse<string>() { Message = "Password has been reset." , Succeeded = true}) :
             StatusCode(StatusCodes.Status422UnprocessableEntity);
     }
         
