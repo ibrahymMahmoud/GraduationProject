@@ -1,32 +1,38 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Principal;
 
 namespace GraduationProject.DTOs
 {
     public class RegisterRequestDto
     {
-        [Required]
-        [MinLength(3, ErrorMessage = "The Minimum lenght for FirstName is  3 characters.")]
-        [MaxLength(50, ErrorMessage = "The Maximum lenght for FirstName is  50 characters.")]
-        public string FirstName { get; set; }
+        [Required(ErrorMessage = "First name is required.")]
+        [MinLength(3, ErrorMessage = "First name must be at least 3 characters long.")]
+        [MaxLength(50, ErrorMessage = "First name must not exceed 50 characters.")]
+        public string FirstName { get; set; }= null!;
 
-        [Required]
-        [MinLength(3, ErrorMessage = "The Minimum lenght for LastName is  3 characters.")]
-        [MaxLength(50, ErrorMessage = "The Maximum lenght for LastName is  50 characters.")]
-        public string LastName { get; set; }
+        [Required(ErrorMessage = "Last name is required.")]
+        [MinLength(3, ErrorMessage = "Last name must be at least 3 characters long.")]
+        [MaxLength(50, ErrorMessage = "Last name must not exceed 50 characters.")]
+        public string LastName { get; set; }= null!;
 
-        [EmailAddress]
-        public string Email { get; set; }
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Please provide a valid email address.")]
+        public string Email { get; set; }= null!;
 
-        [Required]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "Password is required.")]
+        [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
+        [MaxLength(100, ErrorMessage = "Password must not exceed 100 characters.")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$",
+            ErrorMessage = "Password must be at least 6 characters long, and include uppercase, lowercase, and a number.")]
+        public string Password { get; set; } = null!;
 
-        [Required]
-        [Compare("Password", ErrorMessage = "Passwords not matched.")]
-        public string ConfirmPassword { get; set; }
+        [Required(ErrorMessage = "Please confirm your password.")]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; }= null!;
 
-        [Required]
-        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Date of birth is required.")]
+        [DataType(DataType.Date, ErrorMessage = "Please enter a valid date.")]
         public DateTime DateOfBirth { get; set; }
+
+        public IFormFile? Image { get; set; }
     }
 }
