@@ -239,7 +239,8 @@ public class AuthController(
             var errors = identityResult.Errors.Select(e => e.Description).ToList();
             return BadRequest(new BaseResponse<string>(errors));
         }
-        
+
+
         var emailMessage = new EmailMessage
         {
             To = request.Email,
