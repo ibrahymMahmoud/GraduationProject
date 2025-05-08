@@ -107,6 +107,7 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(JwtSettings)));
+
 builder.Services.Configure<GmailSettings>(builder.Configuration.GetSection("MailConfig"));
 
 builder.Services.AddScoped<ITokenService, TokenService>();
